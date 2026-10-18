@@ -262,7 +262,7 @@ cmd_interrupt_cb (FpiUsbTransfer *transfer,
       fpi_device_critical_leave (device);
       fpi_usb_transfer_submit (fpi_usb_transfer_ref (transfer),
                                0,
-                               NULL,
+                               FPI_DEVICE_SYNAPTICS (device)->interrupt_cancellable,
                                cmd_interrupt_cb,
                                NULL);
     }
