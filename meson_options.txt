@@ -30,6 +30,10 @@ option('doc',
        description: 'Whether to build the API documentation',
        type: 'boolean',
        value: true)
+option('validity_dev',
+       description: 'validity driver: build the developer-only overrides FP_VALIDITY_DATA_DIR and FP_VALIDITY_DMI_SERIAL_FILE (never enable in packaged builds)',
+       type: 'boolean',
+       value: false)
 option('installed-tests',
        description: 'Whether to install the installed tests',
        type: 'boolean',

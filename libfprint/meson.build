@@ -139,6 +139,24 @@ driver_sources = {
     'focaltech_moc' : files('drivers/focaltech_moc/focaltech_moc.c'),
     'mafpmoc' : files('drivers/mafpmoc/mafpmoc.c'),
     'secugen' : files('drivers/secugen.c'),
+    'validity' : files(
+        'drivers/validity/validity.c',
+        'drivers/validity/vcsfw_protocol.c',
+        'drivers/validity/validity_tls.c',
+        'drivers/validity/validity_fwext.c',
+        'drivers/validity/validity_sensor.c',
+        'drivers/validity/validity_capture.c',
+        'drivers/validity/validity_db.c',
+        'drivers/validity/validity_enroll.c',
+        'drivers/validity/validity_verify.c',
+        'drivers/validity/validity_hal.c',
+        'drivers/validity/validity_pair.c',
+        'drivers/validity/validity_data.c',
+        'drivers/validity/validity_a2.c',
+        'drivers/validity/validity_a2_capture.c',
+        'drivers/validity/validity_a2_verify.c',
+        'drivers/validity/validity_a2_enroll.c',
+    ),
 }
 
 helper_sources = {
@@ -250,8 +268,25 @@ libfprint_private = static_library('fprint-private',
     link_with: libnbis,
     install: false)
 
+# The fixed-point pipeline also computes trigonometric indices and ranking
+# statistics in binary64. Keep those stable without FMA/fast-math; global
+# CFLAGS say (target arguments come after them on the command line).
+drivers_objects = []
+if 'validity' in drivers
+    libvalidity_moh = static_library('validity-moh',
+        sources: files('drivers/validity/validity_moh.c'),
+        c_args: drivers_cflags + cc.get_supported_arguments([
+            '-ffp-contract=off',
+            '-fno-fast-math',
+        ]),
+        dependencies: deps,
+        install: false)
+    drivers_objects += libvalidity_moh.extract_all_objects(recursive: false)
+endif
+
 libfprint_drivers = static_library('fprint-drivers',
     sources: drivers_sources,
+    objects: drivers_objects,
     c_args: drivers_cflags,
     dependencies: deps,
     link_with: libfprint_private,

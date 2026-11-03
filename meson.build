@@ -147,6 +147,7 @@ drivers_info = {
     'focaltech_moc': {},
     'mafpmoc': {},
     'secugen': {},
+    'validity': { 'helper': ['openssl'] },
 
     # SPI driver (non-optional if SPI is available)
     'elanspi': { 'spi': true, 'helper': ['udev'], 'optional': not have_spi },
@@ -259,6 +260,13 @@ endforeach
 
 if udev_rules.disabled()
     install_udev_rules = false
+endif
+
+# Developer-only environment overrides of the validity driver (see
+# libfprint/drivers/validity/validity_data.c and validity_tls.c)
+libfprint_conf.set10('VALIDITY_DEV_OVERRIDES', get_option('validity_dev'))
+if get_option('validity_dev')
+    warning('validity_dev=true: FP_VALIDITY_DATA_DIR and FP_VALIDITY_DMI_SERIAL_FILE are honoured; do not package this build')
 endif
 
 if install_udev_rules
