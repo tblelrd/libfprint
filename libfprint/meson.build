@@ -139,6 +139,12 @@ driver_sources = {
     'focaltech_moc' : files('drivers/focaltech_moc/focaltech_moc.c'),
     'mafpmoc' : files('drivers/mafpmoc/mafpmoc.c'),
     'secugen' : files('drivers/secugen.c'),
+    'goodixtls' : files(
+        'drivers/goodixtls/goodixtls.c',
+        'drivers/goodixtls/goodix_tls.c',
+        'drivers/goodixtls/goodix_sift.c',
+        'drivers/goodixtls/config_pcap.c',
+    ),
 }
 
 helper_sources = {
